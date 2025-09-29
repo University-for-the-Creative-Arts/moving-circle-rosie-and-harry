@@ -2,8 +2,8 @@
 #include <raylib.h>
 #include "raymath.h"
 
-const int screenWidth = 960;
-const int screenHeight = 600;
+const int screenWidth = 1600;
+const int screenHeight = 900;
 
 class Ball {
     public:
@@ -16,17 +16,20 @@ class Ball {
     }
 
     void Update() {
-
         // Direction Movement
-        if (IsKeyDown(KEY_W)) { direction.y = -1; }
-        else if (IsKeyDown(KEY_S)) { direction.y = 1; }
-        else { direction.y = 0; }
-        if (IsKeyDown(KEY_D)) { direction.x = 1; }
-        else if (IsKeyDown(KEY_A)) { direction.x = -1; }
-        else { direction.x = 0; }
+        direction = Vector2{0, 0};
+        if (IsKeyDown(KEY_W)) { direction.y -= 1; }
+        if (IsKeyDown(KEY_S)) { direction.y += 1; }
+        if (IsKeyDown(KEY_D)) { direction.x += 1; }
+        if (IsKeyDown(KEY_A)) { direction.x -= 1; }
 
         // Applies the normalised movement.
         position += Vector2Normalize(direction) * speed;
+
+        if (position.x - radius < 0) { position.x = 0 + radius; }
+        else if (position.x + radius > screenWidth) { position.x = screenWidth - radius; }
+        if (position.y - radius < 0) { position.y = 0 + radius; }
+        else if (position.y + radius > screenHeight) { position.y = screenHeight - radius; }
     }
 };
 
@@ -34,7 +37,7 @@ Ball ball;
 
 int main() {
 
-    InitWindow(screenWidth, screenHeight, "Raylib Starter Template");
+    InitWindow(screenWidth, screenHeight, "Raylib Project Woa");
     SetTargetFPS(60);
 
     while (!WindowShouldClose()) {
